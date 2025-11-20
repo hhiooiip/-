@@ -1,181 +1,350 @@
 <!DOCTYPE html>
-<html lang="zh-cn">
+<html lang="zh-CN">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>深色科技主题</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>面试展示 | 陈渝</title>
+    <style>
+        /* --- 核心变量与重置 --- */
+        :root {
+            --bg-color: #050505;
+            --card-bg: rgba(16, 20, 24, 0.85);
+            --primary-cyan: #00f3ff;
+            --primary-pink: #bc13fe;
+            --text-main: #e0e6ed;
+            --text-dim: #8892b0;
+            --border-glow: 0 0 10px rgba(0, 243, 255, 0.5);
+            /* 基础文字尺寸增加 */
+            --base-font-size: 1.05rem; 
+        }
 
-<style>
-/* ------- 全局主题样式 ------- */
-:root {
-    --bg-color: #0d0d0d;
-    --text-color: #e0e0e0;
-    --accent-color: #00d1ff;
-    --card-bg: rgba(20, 20, 20, 0.7);
-}
+        * { box-sizing: border-box; margin: 0; padding: 0; }
 
-html {
-    scroll-behavior: smooth;
-}
+        body {
+            background-color: var(--bg-color);
+            background-image: 
+                linear-gradient(rgba(0, 243, 255, 0.03) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(0, 243, 255, 0.03) 1px, transparent 1px);
+            background-size: 30px 30px;
+            font-family: 'Courier New', 'Consolas', monospace;
+            color: var(--text-main);
+            line-height: 1.8; /* 调整行高，使放大后更易读 */
+            overflow-x: hidden;
+            padding-bottom: 50px;
+            font-size: var(--base-font-size); /* 应用基础文字尺寸 */
+        }
 
-body {
-    margin: 0;
-    background-color: var(--bg-color);
-    color: var(--text-color);
-    font-family: 'Courier New', Courier, monospace;
-}
+        /* --- CRT 扫描线特效 --- */
+        .scanlines {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: linear-gradient(to bottom, rgba(255,255,255,0), rgba(255,255,255,0) 50%, rgba(0,0,0,0.2) 50%, rgba(0,0,0,0.2));
+            background-size: 100% 4px;
+            pointer-events: none;
+            z-index: 999;
+            opacity: 0.6;
+        }
 
-/* ------- 扫描线效果（下层） ------- */
-.scanlines {
-    position: fixed;
-    top: 0; 
-    left: 0; 
-    width: 100%; 
-    height: 100%;
-    background: linear-gradient(
-        to bottom,
-        rgba(255,255,255,0),
-        rgba(255,255,255,0) 50%,
-        rgba(0,0,0,0.12) 50%,
-        rgba(0,0,0,0.12)
-    );
-    background-size: 100% 4px;
-    pointer-events: none;
-    opacity: 0.25;
-    z-index: 0;  /* 放最底层 */
-}
+        /* --- 布局容器 --- */
+        .container {
+            max-width: 850px; /* 略微拓宽容器 */
+            margin: 0 auto;
+            padding: 20px;
+            position: relative;
+            z-index: 1;
+        }
 
-/* ------- 页面主容器 ------- */
-.container {
-    max-width: 850px;
-    margin: 0 auto;
-    padding: 20px;
-    position: relative;
-    z-index: 1;
-}
+        /* --- 故障文字特效 (Glitch) --- */
+        .glitch {
+            font-size: 3rem; /* 标题放大 */
+            font-weight: bold;
+            text-transform: uppercase;
+            position: relative;
+            text-shadow: 2px 2px 0px var(--primary-pink), -2px -2px 0px var(--primary-cyan);
+            animation: glitch-anim 2s infinite linear alternate-reverse;
+        }
 
-/* ------- 卡片动画与样式 ------- */
-.content-box {
-    background: var(--card-bg);
-    padding: 20px;
-    margin: 20px 0;
-    border-radius: 12px;
-    border: 1px solid rgba(0, 209, 255, 0.3);
-    opacity: 0;
-    transform: translateY(20px);
-    transition: opacity 0.6s ease-out, transform 0.6s ease-out;
-}
+        @keyframes glitch-anim {
+            0% { text-shadow: 2px 2px 0px var(--primary-pink), -2px -2px 0px var(--primary-cyan); }
+            25% { text-shadow: -2px 2px 0px var(--primary-pink), 2px -2px 0px var(--primary-cyan); }
+            50% { text-shadow: 2px -2px 0px var(--primary-pink), -2px 2px 0px var(--primary-cyan); }
+            75% { text-shadow: -2px -2px 0px var(--primary-pink), 2px 2px 0px var(--primary-cyan); }
+            100% { text-shadow: 2px 2px 0px var(--primary-pink), -2px -2px 0px var(--primary-cyan); }
+        }
 
-.content-box.visible {
-    opacity: 1;
-    transform: translateY(0);
-}
+        /* --- 封面 Header --- */
+        header {
+            text-align: center;
+            padding: 80px 0 40px;
+            border-bottom: 2px solid var(--primary-cyan);
+            margin-bottom: 40px;
+            position: relative;
+        }
 
-/* 标题发光 */
-h1, h2 {
-    color: var(--accent-color);
-    text-shadow: 0px 0px 8px var(--accent-color);
-    border-left: 4px solid var(--accent-color);
-    padding-left: 8px;
-}
+        header::after {
+            content: "SYSTEM READY //";
+            position: absolute;
+            bottom: -25px;
+            right: 0;
+            background: var(--bg-color);
+            padding-left: 10px;
+            color: var(--primary-cyan);
+            font-size: 1rem; /* 调整字体大小 */
+        }
 
-/* ------- 按钮 ------- */
-.button-container {
-    margin: 20px 0;
-    display: flex;
-    gap: 10px;
-}
+        .subtitle {
+            font-size: 1.4rem; /* 调整字体大小 */
+            color: var(--primary-cyan);
+            margin-top: 10px;
+            letter-spacing: 2px;
+        }
 
-.button-container a {
-    padding: 12px 20px;
-    border-radius: 10px;
-    text-decoration: none;
-    background-color: var(--accent-color);
-    color: #000;
-    font-weight: bold;
-    display: inline-block;
-}
+        .info-tag {
+            display: inline-block;
+            border: 1px solid var(--primary-pink);
+            color: var(--primary-pink);
+            padding: 5px 15px;
+            margin-top: 20px;
+            font-size: 1rem; /* 调整字体大小 */
+            box-shadow: 0 0 5px var(--primary-pink);
+        }
 
-.button-container a:hover {
-    background-color: #00a8cc;
-}
+        /* --- 目录导航 --- */
+        .toc {
+            background: var(--card-bg);
+            border: 1px solid #333;
+            padding: 25px; /* 增加内边距 */
+            margin-bottom: 40px;
+            border-left: 5px solid var(--primary-cyan);
+        }
 
-/* ------- 页脚 ------- */
-footer {
-    text-align: center;
-    padding: 15px;
-    margin-top: 40px;
-    background: rgba(20, 20, 20, 0.7);
-    border-top: 1px solid rgba(255,255,255,0.1);
-}
-</style>
+        .toc h3 { color: var(--primary-cyan); margin-bottom: 15px; }
+        .toc ul { list-style: none; }
+        .toc li { margin: 10px 0; }
+        .toc a {
+            color: var(--text-dim);
+            text-decoration: none;
+            transition: 0.3s;
+            display: block;
+            font-size: 1.1rem; /* 目录文字放大 */
+        }
+        .toc a:hover {
+            color: var(--primary-cyan);
+            transform: translateX(10px);
+            text-shadow: 0 0 8px var(--primary-cyan);
+        }
+        .toc a::before { content: "> "; color: var(--primary-pink); }
+
+        /* --- 内容区块 --- */
+        section {
+            margin-bottom: 70px; /* 增加间距 */
+            opacity: 0; 
+            transform: translateY(20px);
+            transition: all 0.6s ease-out;
+        }
+
+        section.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .section-header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 25px; /* 增加间距 */
+        }
+
+        .section-num {
+            font-size: 4rem; /* 数字放大 */
+            color: rgba(255, 255, 255, 0.1);
+            font-weight: bold;
+            margin-right: 20px;
+            line-height: 1;
+        }
+
+        .section-title {
+            font-size: 1.8rem; /* 章节标题放大 */
+            color: var(--primary-cyan);
+            border-bottom: 1px dashed var(--primary-pink);
+            padding-bottom: 5px;
+            width: 100%;
+        }
+
+        .content-box {
+            background: var(--card-bg);
+            border: 1px solid var(--primary-cyan);
+            padding: 30px; /* 增加内边距 */
+            position: relative;
+            box-shadow: inset 0 0 20px rgba(0, 243, 255, 0.1);
+        }
+
+        /* 角落装饰 */
+        .content-box::before {
+            content: "";
+            position: absolute;
+            top: -2px; left: -2px;
+            width: 15px; height: 15px;
+            border-top: 2px solid var(--primary-cyan);
+            border-left: 2px solid var(--primary-cyan);
+        }
+        .content-box::after {
+            content: "";
+            position: absolute;
+            bottom: -2px; right: -2px;
+            width: 15px; height: 15px;
+            border-bottom: 2px solid var(--primary-cyan);
+            border-right: 2px solid var(--primary-cyan);
+        }
+
+        p { margin-bottom: 18px; }
+        strong { color: #fff; font-weight: normal; border-bottom: 1px solid var(--primary-pink); }
+
+        /* 技能标签样式 */
+        .skill-tag {
+            display: inline-block;
+            background: rgba(188, 19, 254, 0.2);
+            border: 1px solid var(--primary-pink);
+            padding: 3px 10px;
+            font-size: 0.95rem; /* 调整字体大小 */
+            margin-right: 8px;
+            margin-bottom: 5px;
+        }
+
+        /* --- 底部 --- */
+        footer {
+            text-align: center;
+            font-size: 0.9rem;
+            color: #555;
+            margin-top: 50px;
+            border-top: 1px solid #333;
+            padding-top: 20px;
+        }
+
+        /* --- 移动端适配 --- */
+        @media (max-width: 600px) {
+            .glitch { font-size: 2.5rem; }
+            .section-num { font-size: 3rem; }
+            .section-title { font-size: 1.6rem; }
+            body { font-size: 1rem; line-height: 1.7; }
+            .container { padding: 10px; }
+        }
+    </style>
 </head>
-
 <body>
-<div class="scanlines"></div>
 
-<div class="container">
+    <div class="scanlines"></div>
 
-    <header>
-        <h1>深色科技主题展示</h1>
-    </header>
+    <div class="container">
+        
+        <header>
+            <div class="glitch" data-text="课创室面试展示">课创室面试展示</div>
+            <div class="subtitle">CHEN YU // PORTFOLIO</div>
+            <div class="info-tag">电气工程及其自动化</div>
+        </header>
 
-    <!-- 内容模块 1 -->
-    <div class="content-box">
-        <h2>📌 1. 想加入科创室的原因</h2>
-        <p>
-            希望参与实际技术项目，提升动手与工程能力，把所学知识真正用在项目中。
-            科创室提供实践、研发、协作的环境，非常适合我积累项目经验、提升技术实力。
-        </p>
+        <div class="toc">
+            <h3>// INDEX_目录</h3>
+            <ul>
+                <li><a href="#sec1">01. 加入课创室的原因</a></li>
+                <li><a href="#sec2">02. 对专业的认知</a></li>
+                <li><a href="#sec3">03. 个人基础</a></li>
+                <li><a href="#sec4">04. 未来规划</a></li>
+                <li><a href="#sec5">05. 能带来什么</a></li>
+            </ul>
+        </div>
+
+        <section id="sec1">
+            <div class="section-header">
+                <span class="section-num">01</span>
+                <h2 class="section-title">加入课创室的原因</h2>
+            </div>
+            <div class="content-box typewriter">
+                <p>希望在<strong>真实项目</strong>中提升动手与解决问题的能力，拒绝纸上谈兵，把课堂知识投入实际应用。</p>
+                <p>我认为科创室能提供 <span class="skill-tag">技术指导</span> <span class="skill-tag">项目经验</span> 和 <span class="skill-tag">工程训练</span>，是目前阶段提高综合能力的最佳场所。</p>
+            </div>
+        </section>
+
+        <section id="sec2">
+            <div class="section-header">
+                <span class="section-num">02</span>
+                <h2 class="section-title">对专业的认知</h2>
+            </div>
+            <div class="content-box">
+                <p>电气工程及其自动化核心关注：<br>> 电能传输<br>> 设备控制<br>> 自动化系统实现</p>
+                <p>在目前的学习路径中，我已经掌握了<strong>电路原理</strong>与<strong>控制逻辑</strong>的基础，并开始尝试绘制 PCB，致力于理解设备从理论推导到实物落地的全过程。</p>
+            </div>
+        </section>
+
+        <section id="sec3">
+            <div class="section-header">
+                <span class="section-num">03</span>
+                <h2 class="section-title">个人基础</h2>
+            </div>
+            <div class="content-box">
+                <p>> <strong>正在学习：</strong> <span style="color:var(--primary-cyan)">C语言</span> / PCB绘制</p>
+                <p>> <strong>实操兴趣：</strong> 焊接、电路调试、制作最小系统。</p>
+                <p>> <strong>核心目标：</strong> 把编程思维与自动化控制结合，形成完整技术链路。</p>
+                <hr style="border:0; border-top:1px dashed #333; margin:15px 0;">
+                <p>TOOLSET_常用工具：<br>
+                [ <span class="skill-tag">嘉立创EDA</span> ] [ <span class="skill-tag">VS Code</span> ]</p>
+            </div>
+        </section>
+
+        <section id="sec4">
+            <div class="section-header">
+                <span class="section-num">04</span>
+                <h2 class="section-title">未来规划</h2>
+            </div>
+            <div class="content-box">
+                <p><strong>[ 在校阶段 ]</strong><br>
+                继续深入学习 PLC、单片机、嵌入式开发。多参加实际项目，累积工程经验（Engineering Experience）。</p>
+                <p><strong>[ 长期方向 ]</strong><br>
+                目标进入 <span style="color:var(--primary-pink)">智能电网</span> 或 <span style="color:var(--primary-pink)">自动化设备</span> 领域，成长为能独立设计系统的全栈工程师。</p>
+            </div>
+        </section>
+
+        <section id="sec5">
+            <div class="section-header">
+                <span class="section-num">05</span>
+                <h2 class="section-title">能带来什么</h2>
+            </div>
+            <div class="content-box">
+                <ul style="list-style: none;">
+                    <li style="margin-bottom:10px;">✔ <strong>态度稳定：</strong> 愿意承担枯燥的技术任务，不眼高手低。</li>
+                    <li style="margin-bottom:10px;">✔ <strong>能力增长：</strong> 持续提升编程与电气基础，能快速上手新工具。</li>
+                    <li>✔ <strong>长期主义：</strong> 对自动化与嵌入式方向保持长期兴趣，愿意投入时间做出可展示的成果。</li>
+                </ul>
+            </div>
+        </section>
+
+        <footer>
+            <p>END OF FILE // CHEN YU 2024</p>
+        </footer>
+
     </div>
 
-    <!-- 内容模块 2 -->
-    <div class="content-box">
-        <h2>📌 2. 专业认知与未来规划</h2>
-        <p>
-            电气工程及其自动化涉及电能传输、控制与自动化系统实现。我在学习中逐渐理解了电路与控制原理，
-            也开始自己画 PCB，把理论变成真实电路。未来想继续学习 PLC、单片机，参与更多项目，最终成为能独立设计系统的工程师。
-        </p>
-    </div>
+    <script>
+        // --- 滚动显示动画 Script ---
+        document.addEventListener("DOMContentLoaded", function() {
+            const observerOptions = {
+                root: null,
+                rootMargin: '0px',
+                threshold: 0.1
+            };
 
-    <!-- 内容模块 3 -->
-    <div class="content-box">
-        <h2>📌 3. 个人基础</h2>
-        <p>正在学习：C 语言、PCB 绘制。</p>
-        <p>有操作兴趣：焊接、调电路、做小系统。</p>
-        <p>目标：把编程与自动化控制结合，形成完整技术链路。</p>
-        <p>常用软件：嘉立创 EDA、VS Code。</p>
-    </div>
+            const observer = new IntersectionObserver((entries, observer) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('visible');
+                    }
+                });
+            }, observerOptions);
 
-    <!-- 按钮链接 -->
-    <div class="button-container">
-        <a href="#">返回顶部</a>
-        <a href="#">示例按钮</a>
-    </div>
-
-</div>
-
-<footer>
-    © 2025 科技主题页面示例
-</footer>
-
-<!-- ------- 进入视口动画 ------- -->
-<script>
-document.addEventListener("DOMContentLoaded", function () {
-    const boxes = document.querySelectorAll('.content-box');
-
-    const observer = new IntersectionObserver(entries => {
-        entries.forEach(entry => {
-            if (entry.isIntersecting) {
-                entry.target.classList.add('visible');
-                observer.unobserve(entry.target);  // 提升性能：只触发一次
-            }
+            const sections = document.querySelectorAll('section');
+            sections.forEach(section => {
+                observer.observe(section);
+            });
         });
-    }, { threshold: 0.2 });
-
-    boxes.forEach(box => observer.observe(box));
-});
-</script>
-
+    </script>
 </body>
 </html>
