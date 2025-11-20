@@ -5,6 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>陈渝酷炫展示</title>
 <style>
+/* --- 核心变量 --- */
 :root{
     --bg-color:#050505;
     --primary-cyan:#00f3ff;
@@ -15,7 +16,8 @@
 /* 全屏基础样式 */
 html,body{
     margin:0; padding:0; width:100%; height:100%; overflow:hidden;
-    font-family:'Segoe UI',sans-serif; background:var(--bg-color); color:var(--text-main);
+    font-family:'Courier New','Consolas', monospace; /* 统一字体风格 */
+    background:var(--bg-color); color:var(--text-main);
 }
 /* 矩阵雨背景 */
 #matrix{position:fixed; top:0; left:0; width:100%; height:100%; z-index:0;}
@@ -72,7 +74,8 @@ html,body{
 .info-tag:hover{box-shadow:0 0 25px rgba(0,243,255,0.7);}
 /* 内容卡片 */
 .content-box{
-    background:rgba(16,20,24,0.85); border:1px solid var(--primary-cyan);
+    background:rgba(16,20,24,0.9); /* 略微提高不透明度，增强可读性 */
+    border:1px solid var(--primary-cyan);
     padding:30px; margin-top:20px; max-width:700px;
     box-shadow: inset 0 0 20px rgba(0,243,255,0.1);
 }
@@ -95,6 +98,19 @@ footer{margin-top:30px; color:#555; font-size:0.9rem;}
     animation:floatParticles linear infinite;
 }
 @keyframes floatParticles{0%{transform:translateY(0px);}100%{transform:translateY(-600px);}}
+
+/* --- 移动端适配 (新增) --- */
+@media (max-width: 600px) {
+    .glitch { font-size: 2.5rem; } /* 缩小主标题 */
+    .author-name { font-size: 1.5rem; } /* 缩小人名 */
+    .author-name::before, .author-name::after {
+        content: "::"; /* 移动端简化符号 */
+        left: -15px; right: -15px; /* 调整符号位置 */
+    }
+    .section-title { font-size: 1.5rem; } /* 缩小内页标题 */
+    .content-box { max-width: 95%; padding: 20px; } /* 确保内容不溢出 */
+    .page-indicator { right: 10px; bottom: 10px; }
+}
 </style>
 </head>
 <body>
@@ -135,12 +151,13 @@ footer{margin-top:30px; color:#555; font-size:0.9rem;}
     </section>
 
     <section class="slide">
-        <div class="section-title">未来规划 & 能带来什么</div>
-        <div class="content-box">
+        <div class="section-title">我的价值与展望</div> <div class="content-box">
             <ul style="list-style:none;">
-                <li>✔ <strong>态度稳定：</strong> 愿承担枯燥技术任务</li>
-                <li>✔ <strong>能力增长：</strong> 持续提升编程与电气基础</li>
-                <li>✔ <strong>长期主义：</strong> 对自动化与嵌入式方向保持兴趣</li>
+                <li>✔ <strong>未来规划：</strong> 继续深入学习 PLC、单片机、嵌入式，积累工程经验。</li>
+                <li>✔ <strong>长期方向：</strong> 进入智能电网或自动化设备领域，成为能独立设计系统的工程师。</li>
+                <li style="margin-top:20px;">---</li>
+                <li>✔ <strong>能带来：</strong> 稳定的学习态度和长期投入意愿。</li>
+                <li>✔ <strong>能力：</strong> 持续提升编程与电气基础能力，输出可展示的成果。</li>
             </ul>
         </div>
         <footer>END OF FILE // CHEN YU 2024</footer>
@@ -150,18 +167,26 @@ footer{margin-top:30px; color:#555; font-size:0.9rem;}
 <div class="page-indicator" id="pageIndicator">1 / 5</div>
 
 <script>
-// 幻灯片切换
+// 获取 --primary-cyan 的 RGB 值，用于 Canvas 绘图性能优化 (0, 243, 255)
+const MATRIX_COLOR = 'rgb(0, 243, 255)';
+
+// --- 幻灯片切换逻辑 ---
 let currentSlide = 0;
 const slides = document.querySelectorAll('.slide');
 const pageIndicator = document.getElementById('pageIndicator');
+
 function showSlide(i){
     slides.forEach((s,idx)=>s.classList.toggle('active',idx===i));
     pageIndicator.textContent = `${i+1} / ${slides.length}`;
 }
+
+// 键盘事件 (上下箭头)
 document.addEventListener('keydown', e=>{
     if(e.key==='ArrowDown'){currentSlide=Math.min(currentSlide+1,slides.length-1); showSlide(currentSlide);}
     else if(e.key==='ArrowUp'){currentSlide=Math.max(currentSlide-1,0); showSlide(currentSlide);}
 });
+
+// 鼠标滚轮事件 (防抖动)
 let wheelTimeout;
 window.addEventListener('wheel', e=>{
     if(wheelTimeout) return;
@@ -171,7 +196,7 @@ window.addEventListener('wheel', e=>{
     wheelTimeout=setTimeout(()=>{wheelTimeout=null;},500);
 });
 
-// 矩阵雨
+// --- 矩阵雨 Canvas 动画 ---
 const canvas = document.getElementById('matrix');
 const ctx = canvas.getContext('2d');
 canvas.width=window.innerWidth; canvas.height=window.innerHeight;
@@ -179,7 +204,8 @@ const letters='01'; const fontSize=16; const columns=Math.floor(canvas.width/fon
 const drops=Array(columns).fill(1);
 function drawMatrix(){
     ctx.fillStyle='rgba(0,0,0,0.05)'; ctx.fillRect(0,0,canvas.width,canvas.height);
-    ctx.fillStyle='lime'; ctx.font=fontSize+'px monospace';
+    ctx.fillStyle=MATRIX_COLOR; /* 统一颜色 */
+    ctx.font=fontSize+'px monospace';
     for(let i=0;i<drops.length;i++){
         ctx.fillText(letters[Math.floor(Math.random()*letters.length)],i*fontSize,drops[i]*fontSize);
         if(drops[i]*fontSize>canvas.height && Math.random()>0.975)drops[i]=0;
@@ -189,7 +215,7 @@ function drawMatrix(){
 }
 drawMatrix();
 
-// 粒子漂浮
+// --- 粒子漂浮动画 (DOM/CSS) ---
 const particleCount = 80;
 for(let i=0;i<particleCount;i++){
     const p=document.createElement('div'); p.className='particle';
@@ -199,17 +225,20 @@ for(let i=0;i<particleCount;i++){
     document.body.appendChild(p);
 }
 
-// 光带动画（简单波动）
+// --- 光带 Canvas 动画 ---
 const lightCanvas=document.getElementById('light'); const lctx=lightCanvas.getContext('2d');
 lightCanvas.width=window.innerWidth; lightCanvas.height=window.innerHeight;
 function drawLight(){
     lctx.clearRect(0,0,lightCanvas.width,lightCanvas.height);
     const time=Date.now()/1000;
+    // 使用统一的颜色和低透明度
+    lctx.strokeStyle=`rgba(0, 243, 255, 0.08)`;
+    lctx.lineWidth=2;
+    
     for(let i=0;i<3;i++){
-        lctx.strokeStyle=`rgba(0,255,255,0.08)`; lctx.lineWidth=2;
         lctx.beginPath();
         for(let x=0;x<window.innerWidth;x+=10){
-            const y=window.innerHeight/2+50*Math.sin(x*0.02+time+i*2);
+            const y=lightCanvas.height/2+50*Math.sin(x*0.02+time+i*2);
             if(x===0) lctx.moveTo(x,y); else lctx.lineTo(x,y);
         }
         lctx.stroke();
