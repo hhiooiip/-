@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>深色科技主题</title>
+
+<style>
+/* ------- 全局主题样式 ------- */
+:root {
+    --bg-color: #0d0d0d;
+    --text-color: #e0e0e0;
+    --accent-color: #00d1ff;
+    --card-bg: rgba(20, 20, 20, 0.7);
+}
+
+html {
+    scroll-behavior: smooth;
+}
+
+body {
+    margin: 0;
+    background-color: var(--bg-color);
+    color: var(--text-color);
+    font-family: 'Courier New', Courier, monospace;
+}
+
+/* ------- 扫描线效果（下层） ------- */
+.scanlines {
+    position: fixed;
+    top: 0; 
+    left: 0; 
+    width: 100%; 
+    height: 100%;
+    background: linear-gradient(
+        to bottom,
+        rgba(255,255,255,0),
+        rgba(255,255,255,0) 50%,
+        rgba(0,0,0,0.12) 50%,
+        rgba(0,0,0,0.12)
+    );
+    background-size: 100% 4px;
+    pointer-events: none;
+    opacity: 0.25;
+    z-index: 0;  /* 放最底层 */
+}
+
+/* ------- 页面主容器 ------- */
+.container {
+    max-width: 850px;
+    margin: 0 auto;
+    padding: 20px;
+    position: relative;
+    z-index: 1;
+}
+
+/* ------- 卡片动画与样式 ------- */
+.content-box {
+    background: var(--card-bg);
+    padding: 20px;
+    margin: 20px 0;
+    border-radius: 12px;
+    border: 1px solid rgba(0, 209, 255, 0.3);
+    opacity: 0;
+    transform: translateY(20px);
+    transition: opacity 0.6s ease-out, transform 0.6s ease-out;
+}
+
+.content-box.visible {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+/* 标题发光 */
+h1, h2 {
+    color: var(--accent-color);
+    text-shadow: 0px 0px 8px var(--accent-color);
+    border-left: 4px solid var(--accent-color);
+    padding-left: 8px;
+}
+
+/* ------- 按钮 ------- */
+.button-container {
+    margin: 20px 0;
+    display: flex;
+    gap: 10px;
+}
+
+.button-container a {
+    padding: 12px 20px;
+    border-radius: 10px;
+    text-decoration: none;
+    background-color: var(--accent-color);
+    color: #000;
+    font-weight: bold;
+    display: inline-block;
+}
+
+.button-container a:hover {
+    background-color: #00a8cc;
+}
+
+/* ------- 页脚 ------- */
+footer {
+    text-align: center;
+    padding: 15px;
+    margin-top: 40px;
+    background: rgba(20, 20, 20, 0.7);
+    border-top: 1px solid rgba(255,255,255,0.1);
+}
+</style>
+</head>
+
+<body>
+<div class="scanlines"></div>
+
+<div class="container">
+
+    <header>
+        <h1>深色科技主题展示</h1>
+    </header>
+
+    <!-- 内容模块 1 -->
+    <div class="content-box">
+        <h2>📌 1. 想加入科创室的原因</h2>
+        <p>
+            希望参与实际技术项目，提升动手与工程能力，把所学知识真正用在项目中。
+            科创室提供实践、研发、协作的环境，非常适合我积累项目经验、提升技术实力。
+        </p>
+    </div>
+
+    <!-- 内容模块 2 -->
+    <div class="content-box">
+        <h2>📌 2. 专业认知与未来规划</h2>
+        <p>
+            电气工程及其自动化涉及电能传输、控制与自动化系统实现。我在学习中逐渐理解了电路与控制原理，
+            也开始自己画 PCB，把理论变成真实电路。未来想继续学习 PLC、单片机，参与更多项目，最终成为能独立设计系统的工程师。
+        </p>
+    </div>
+
+    <!-- 内容模块 3 -->
+    <div class="content-box">
+        <h2>📌 3. 个人基础</h2>
+        <p>正在学习：C 语言、PCB 绘制。</p>
+        <p>有操作兴趣：焊接、调电路、做小系统。</p>
+        <p>目标：把编程与自动化控制结合，形成完整技术链路。</p>
+        <p>常用软件：嘉立创 EDA、VS Code。</p>
+    </div>
+
+    <!-- 按钮链接 -->
+    <div class="button-container">
+        <a href="#">返回顶部</a>
+        <a href="#">示例按钮</a>
+    </div>
+
+</div>
+
+<footer>
+    © 2025 科技主题页面示例
+</footer>
+
+<!-- ------- 进入视口动画 ------- -->
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+    const boxes = document.querySelectorAll('.content-box');
+
+    const observer = new IntersectionObserver(entries => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                entry.target.classList.add('visible');
+                observer.unobserve(entry.target);  // 提升性能：只触发一次
+            }
+        });
+    }, { threshold: 0.2 });
+
+    boxes.forEach(box => observer.observe(box));
+});
+</script>
+
+</body>
+</html>
